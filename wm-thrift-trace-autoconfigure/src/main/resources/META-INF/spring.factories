@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.wm.spring.boot.autoconfigure.rpc.thrift.ThriftServerAutoConfiguration,\
+  com.wm.spring.boot.autoconfigure.rpc.thrift.ThriftClientAutoConfiguration,\
+  com.wm.spring.boot.autoconfigure.rpc.trace.TraceAutoConfiguration,\
+  com.wm.spring.boot.autoconfigure.rpc.trace.zipkin.ZipkinLogAutoConfiguration,\
+  com.wm.spring.boot.autoconfigure.rpc.trace.zipkin.ZipkinKafkaAutoConfiguration

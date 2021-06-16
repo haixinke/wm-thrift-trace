@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>wm-thrift-trace-starter</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0</version>
+    <name>wm-thrift-trace-starter</name>
+
+    <parent>
+        <groupId>com.wm.spring.boot</groupId>
+        <artifactId>wm-thrift-trace</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <distributionManagement>
+        <!-- use the following if you're not using a snapshot version. -->
+        <repository>
+            <id>releases</id>
+            <name>local release nexus</name>
+            <url>http://nexus.wm/content/repositories/releases/</url>
+        </repository>
+        <!-- use the following if you ARE using a snapshot version. -->
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>local snapshots nexus</name>
+            <url>http://nexus.wm/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.wm.spring.boot</groupId>
+            <artifactId>wm-thrift-trace-autoconfigure</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+</project>

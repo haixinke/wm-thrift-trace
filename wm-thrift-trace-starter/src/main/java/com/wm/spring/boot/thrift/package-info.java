@@ -1,0 +1,1 @@
+package com.wm.spring.boot.thrift;
