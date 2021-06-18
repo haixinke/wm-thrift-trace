@@ -13,8 +13,6 @@
  */
 package com.wm.rpc.thrift.trace;
 
-import com.wm.rpc.thrift.trace.ClientSpanDecorator;
-import com.wm.rpc.thrift.trace.SpanDecorator;
 import io.opentracing.Span;
 import org.apache.thrift.protocol.TMessage;
 

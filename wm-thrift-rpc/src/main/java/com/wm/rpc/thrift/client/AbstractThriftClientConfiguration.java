@@ -4,8 +4,6 @@ import com.facebook.nifty.client.FramedClientChannel;
 import com.facebook.nifty.client.FramedLoadBalanceConnector;
 import com.facebook.nifty.client.NiftyClientConnector;
 import com.facebook.nifty.duplex.TDuplexProtocolFactory;
-import com.wm.rpc.thrift.client.PooledThriftClientProxy;
-import com.wm.rpc.thrift.client.ThriftClientPoolFactory;
 import com.wm.rpc.thrift.expand.ProduceExpand;
 import com.wm.rpc.thrift.identity.IdentityProvider;
 import com.wm.rpc.thrift.multiplex.TMultiplexedProtocolFactory;
