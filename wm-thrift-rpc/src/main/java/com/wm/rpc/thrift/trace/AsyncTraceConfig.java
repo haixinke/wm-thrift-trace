@@ -57,7 +57,7 @@ public class AsyncTraceConfig implements AsyncConfigurer, ApplicationContextAwar
 
     @Bean
 //    @ConditionalOnMissingBean
-    public Executor igenTraceExecutor() {
+    public Executor traceExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setTaskDecorator(taskDecorator);
         executor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
@@ -66,7 +66,7 @@ public class AsyncTraceConfig implements AsyncConfigurer, ApplicationContextAwar
 
     @Override
     public Executor getAsyncExecutor() {
-        return igenTraceExecutor();
+        return traceExecutor();
     }
 
     @Override

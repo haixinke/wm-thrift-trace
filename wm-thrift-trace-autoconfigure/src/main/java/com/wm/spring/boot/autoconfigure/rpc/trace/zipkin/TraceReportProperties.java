@@ -21,7 +21,7 @@ public class TraceReportProperties {
     /**
      * log或kafka
      */
-    private String  transport = "log";
+    private String  transport = "kafka";
 
     private String kafkaBootstrapServers = "127.0.0.1:9092";
 

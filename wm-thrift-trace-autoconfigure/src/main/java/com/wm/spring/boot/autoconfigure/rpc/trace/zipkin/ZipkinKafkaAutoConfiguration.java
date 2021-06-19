@@ -33,7 +33,12 @@ public class ZipkinKafkaAutoConfiguration {
 
     @Bean
     public Reporter<Span> reporter() {
-        return AsyncReporter.builder(kafkaSender()).build();
+        Reporter<Span> reporter = AsyncReporter.builder(kafkaSender()).build();
+        return span -> {
+            if (traceReportProperties.isEnabled()) {
+                reporter.report(span);
+            }
+        };
     }
 
     @Bean
