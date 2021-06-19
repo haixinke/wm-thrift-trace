@@ -5,10 +5,10 @@ Thrift是facebook开发的高性能的服务通信框架，很多公司使用该
 [zipkin-server](https://github.com/openzipkin/zipkin/tree/master/zipkin-server)、[zipkin-dependencies](https://github.com/openzipkin/zipkin-dependencies)
 等组件实现微服务的链路追踪、统计功能。
 该框架集成了[swift](https://github.com/facebookarchive/swift)、[nifty](https://github.com/facebookarchive/nifty)。
-基于spring boot框架。
+基于spring boot框架。注册中心用的是eureka。
 
 ## 功能
-- 支持Http请求自动创建链路信息
+- Http请求自动创建链路信息
 - 微服务RPC之间创建、传递链路信息
 - 微服务RPC支持扩展信息传递
 - 支持采样功能关闭
@@ -16,15 +16,16 @@ Thrift是facebook开发的高性能的服务通信框架，很多公司使用该
 - 支持多线程之间传递链路信息
 
 ## 整体架构图
-### 直接推送kafka(网上扒的图)
+### 架构图一(直接推送kafka，网上扒的图)
 ![trace](https://user-images.githubusercontent.com/6084920/122634526-37751000-d111-11eb-9f10-5b48992bbdda.png)
 
-### 本地落日志(自己画的，凑合看)
+### 架构图二(本地落日志，离线推送kafka，自己画的，凑合看吧)
 ![QQ20210619-153133](https://user-images.githubusercontent.com/6084920/122634954-b408ee00-d113-11eb-8a52-93171c189def.png)
 
 
-简单的系统，微服务数量不多、并发不大，可以用上面的架构，足以满足，该架构缺点就是所有服务都要依赖kafka。
-如果微服务数量很多，并发也比较大，第一步推送kafka调整为落地本地日志，然后通过filebeat离线采集日志，推送kafka，后面的流程都是一样的。我们公司有大概七八十个微服务，每天千万级的调用量，所以我们选择链路信息落地本地日志的方式。
+简单的系统，微服务数量不多、并发不大，可以用图一的架构，足以满足，该架构缺点就是所有服务都要依赖kafka，可能会对业务处理性能有稍许的影响，优点是架构相对比较简单。
+如果微服务数量很多，并发也比较大，第一步推送kafka调整为落地本地日志，然后通过filebeat离线采集日志，推送kafka，后面的流程都是一样的，优点是不影响正常业务处理，缺点是架构比较复杂。
+我们公司有大概七八十个微服务，每天千万级的调用量，所以我选择架构图二链路信息落地本地日志的方式。
 
 ## 使用
 ### 安装
@@ -32,12 +33,13 @@ Thrift是facebook开发的高性能的服务通信框架，很多公司使用该
 mvn clean install -Dmaven.test.skip=true
 
 ### 引用（client与server）
+```
     <dependency>
             <groupId>com.wm.spring.boot</groupId>
             <artifactId>wm-thrift-trace-starter</artifactId>
             <version>1.0.0</version>
     </dependency>
-    
+```   
 ### Spring
 - 支持spring-boot 1.5.4.RELEASE、2.1.0.RELEASE版本，别的版本没有验证，可能不兼容
 - 支持spring-cloud Edgware.SR6、Finchley.SR2，别的版本没有验证，可能不兼容
@@ -88,9 +90,37 @@ mvn clean install -Dmaven.test.skip=true
 </AsyncLogger>
 ``` 
 
-### server端
-
-
 ### client端
+对每个需要通信的rpc server定义一个配置文件，继承AbstractThriftClientConfiguration，实现getDiscoveryName()方法，该方法返回rpc server的应用名称，即服务提供者的spring.application.name定义的名称。
+如果某个服务存在多个服务节点，client会通过eureka实现软负载均衡。然后在该位置文件中定义你需要使用的服务端bean对象，例如如下所示：
+```
+@Configuration
+public class XxxRpcConfig extends AbstractThriftClientConfiguration {
+
+	@Value("${service.xxx.name}")
+    private String name;
+
+	@Override
+	protected String getDiscoveryName() {
+		return name;
+	}
+
+    @Bean
+    public IUserService userService() {
+        return getClient(IUserService.class);
+    }
+
+    @Bean
+    public IOrgService orgService() {
+        return getClient(IOrgService.class);
+    }
+}
+
+```
+### 注意事项
+- 使用swift对模型进行ThriftField注解时，不要使用9999和10000，这两个有特别用处
+- 如果有自定义线程装饰器，实现（implements）TaskDecorator接口的，需要调整为继承（extends）TraceTaskDecorator
+- rpc server服务如果有自定义线程池，用来调用其他rpc服务，请使用定制过的线程池TraceExecutor，保证追踪链信息不丢失
+
 
 
