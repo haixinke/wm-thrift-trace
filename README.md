@@ -16,7 +16,11 @@ Thrift是facebook开发的高性能的服务通信框架，很多公司使用该
 - 支持多线程之间传递链路信息
 
 ## 整体架构图
+### 直接推送kafka(网上扒的图)
 ![trace](https://user-images.githubusercontent.com/6084920/122634526-37751000-d111-11eb-9f10-5b48992bbdda.png)
+
+### 本地落日志(自己画的，凑合看)
+![QQ20210619-153133](https://user-images.githubusercontent.com/6084920/122634954-b408ee00-d113-11eb-8a52-93171c189def.png)
 
 
 简单的系统，微服务数量不多、并发不大，可以用上面的架构，足以满足，该架构缺点就是所有服务都要依赖kafka。
