@@ -124,7 +124,7 @@ public class XxxRpcConfig extends AbstractThriftClientConfiguration {
 ExpandContexts.put(key,value)操作，在rpc通信中会自动处理，server端只需要调用ExpandContexts.get(key)就能得到client传递的值。如果是通用场景，client需要实现ProduceExpand接口，
 server端实现ConsumeExpand接口，注入spring容器，扩展信息传递就是这么简单，无需框架升级。
 
-### 注意事项
+## 注意事项
 - 使用swift对模型进行ThriftField注解时，不要使用9999和10000，这两个有特别用处
 - 如果有自定义线程装饰器，实现（implements）TaskDecorator接口的，需要调整为继承（extends）TraceTaskDecorator
 - rpc server服务如果有自定义线程池，用来调用其他rpc服务，请使用定制过的线程池TraceExecutor，保证追踪链信息不丢失
