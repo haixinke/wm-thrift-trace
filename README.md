@@ -24,6 +24,31 @@ mvn clean install -Dmaven.test.skip=true
             <version>1.0.0</version>
     </dependency>
     
+### Spring
+- 支持spring-boot 1.5.4.RELEASE、2.1.0.RELEASE版本，别的版本没有验证，可能不兼容
+- 支持spring-cloud Edgware.SR6、Finchley.SR2，别的版本没有验证，可能不兼容
+    
+### 微服务log4j2.xml调整(链路信息本地落日志的方式，直接推送kafka可以忽略)
+- appenders目录下新增RollingFile
+```
+<RollingFile name="TRACE-FILE" fileName="/data/logs/xxx-xxx.zipkin.log" filePattern="/data/logs/xxx-xxx-%d{yyyy-MM-dd}-%i.zipkin.log">
+   <PatternLayout pattern="%msg%n" />
+   <Policies>
+      <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+      <SizeBasedTriggeringPolicy size="2GB"/>
+   </Policies>
+</RollingFile>
+```
+- loggers目录下新增logger或AsyncLogger
+``` 
+<Logger name="com.wm.spring.boot.autoconfigure.rpc.trace.zipkin" level="info" additivity="false">
+    <appender-ref ref="TRACE-FILE" />
+</Logger>
+或
+<AsyncLogger name="com.wm.spring.boot.autoconfigure.rpc.trace.zipkin" level="info" additivity="false">
+    <appender-ref ref="TRACE-FILE" />
+</AsyncLogger>
+``` 
 ### server端
 
 
