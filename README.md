@@ -16,7 +16,6 @@ Thrift是facebook开发的高性能的服务通信框架，很多公司使用该
 - 支持多线程之间传递链路信息
 
 ## 整体架构图
-[架构图](img/trace.png)
 ![trace](https://user-images.githubusercontent.com/6084920/122634526-37751000-d111-11eb-9f10-5b48992bbdda.png)
 
 
