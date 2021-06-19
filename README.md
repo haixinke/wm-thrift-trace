@@ -66,7 +66,7 @@ mvn clean install -Dmaven.test.skip=true
 | 属性 | 描述 |
 | --- | --- |
 | wm.rpc.thrift.client.maxConnections | client与server的最大连接数，默认为32 |
-| client.[server端服务接口名称].timeout | client与某个指定服务的连接超时时间，默认为10秒 |
+| client.[server端服务接口名称].timeout | client与某个server的指定服务的连接超时时间，默认为10秒 |
 
 ### 微服务log4j2.xml调整(链路信息本地落日志的方式，直接推送kafka可以忽略)
 - appenders目录下新增RollingFile
@@ -117,6 +117,13 @@ public class XxxRpcConfig extends AbstractThriftClientConfiguration {
 }
 
 ```
+
+### 扩展信息传递
+在使用thrift过程中，会遇到一些额外通用信息的传递，例如登陆用户的id、角色id等，如果在每次rpc调用过程中都手动处理会比较繁琐，常规做法是在rpc协议层手动统一处理，
+坏处是每次增加额外的信息处理都要升级框架，client端与server端都要升级。所以增加了通用扩展字段，本质就是Map<String, String>。如果只是特别场景要传递，client只需要在某个场景中调用
+ExpandContexts.put(key,value)操作，在rpc通信中会自动处理，server端只需要调用ExpandContexts.get(key)就能得到client传递的值。如果是通用场景，client需要实现ProduceExpand接口，
+server端实现ConsumeExpand接口，注入spring容器，扩展信息传递就是这么简单，无需框架升级。
+
 ### 注意事项
 - 使用swift对模型进行ThriftField注解时，不要使用9999和10000，这两个有特别用处
 - 如果有自定义线程装饰器，实现（implements）TaskDecorator接口的，需要调整为继承（extends）TraceTaskDecorator
