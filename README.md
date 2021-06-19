@@ -34,11 +34,11 @@ mvn clean install -Dmaven.test.skip=true
 
 ### 引用（client与server）
 ```
-    <dependency>
-            <groupId>com.wm.spring.boot</groupId>
-            <artifactId>wm-thrift-trace-starter</artifactId>
-            <version>1.0.0</version>
-    </dependency>
+<dependency>
+   <groupId>com.wm.spring.boot</groupId>
+   <artifactId>wm-thrift-trace-starter</artifactId>
+   <version>1.0.0</version>
+</dependency>
 ```   
 ### Spring
 - 支持spring-boot 1.5.4.RELEASE、2.1.0.RELEASE版本，别的版本没有验证，可能不兼容
